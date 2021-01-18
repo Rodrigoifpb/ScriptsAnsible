@@ -1,0 +1,26 @@
+---
+# tasks file for revoked
+
+- name: Garantindo que o arquivo de revogacao existe
+  ansible.builtin.file:
+    path: /etc/ssh/sshd_revoked_keys
+    state: touch
+
+- name: Copiando chave para o servidor
+  copy: src={{ chave }} dest=/etc/ssh/
+
+- name: Realizando backup do arquivo
+  ansible.builtin.copy:
+    src: /etc/ssh/sshd_revoked_keys
+    dest: /etc/ssh/sshd_revoked_keys.old
+
+- name: Revogando a chave do usuario
+  shell: ssh-keygen -k -u -f /etc/ssh/sshd_revoked_keys /etc/ssh/{{ chave }}
+
+- name: apagando chave do usuario
+  ansible.builtin.file:
+    path: /etc/ssh/{{ chave }}
+    state: absent
+
+- name: Restartando o ssh
+  shell: systemctl restart sshd

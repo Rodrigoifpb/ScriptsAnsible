@@ -1,0 +1,17 @@
+---
+# tasks file for insereScript
+
+- name: Copiando script para o servidor
+  copy: src={{ script }} dest={{ destino }}
+
+- name: Alterando permissao do script
+  ansible.builtin.file:
+    path: "{{ destino }}/{{ script }}"
+    mode: '0755'
+
+- name: Inserindo script no cron
+  ansible.builtin.cron:
+    name: "{{ nome_script }}"
+    minute: "{{ minuto }}"
+    hour: "{{ hora }}"
+    job: "{{ destino }}/{{ script }}"

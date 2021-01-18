@@ -1,0 +1,22 @@
+---
+# tasks file for generateVault
+#
+- name: Curl para colocar a chave no arquivo pem
+  shell: curl -o /etc/ssh/trusted-user-ca-keys.pem http://{{ vault }}:8200/v1/ssh_ca/public_key
+
+- name: Arquivo de revogação das chaves
+  ansible.builtin.file:
+    path: /etc/ssh/sshd_revoked_keys
+    state: touch
+
+- name: conter a linha TrustedUserCAKeys no arquivo /etc/ssh/ssh_config
+  lineinfile: path=/etc/ssh/sshd_config line='TrustedUserCAKeys /etc/ssh/trusted-user-ca-keys.pem' state=present
+
+- name: conter a linha RevokedKeys no arquivo /etc/ssh/ssh_config
+  lineinfile: path=/etc/ssh/sshd_config line='RevokedKeys /etc/ssh/sshd_revoked_keys' state=present
+
+- name: Habilitar a revogação das chaves
+  shell: ssh-keygen -k -f /etc/ssh/sshd_revoked_keys
+
+- name: reiniciar o sshd
+  shell: systemctl restart sshd

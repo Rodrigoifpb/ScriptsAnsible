@@ -1,0 +1,5 @@
+---
+# vars file for revoked
+
+#chave: #cahve para ser revogada
+chave: gabriel.pem

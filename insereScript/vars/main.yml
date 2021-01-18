@@ -1,0 +1,13 @@
+---
+# vars file for insereScript
+#
+#script: #nome do script
+script: teste1.sh
+#destino: #caminho do script
+destino: /opt/digivox/scripts
+#nome_script: #nome do script
+nome_script: teste1.sh
+#minuto: #minutos em int
+minuto: 00
+#hora: #pode ser em float
+hora: 00
