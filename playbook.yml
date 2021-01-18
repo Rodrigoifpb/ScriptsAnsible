@@ -1,0 +1,7 @@
+- name: prod
+  hosts: host
+  roles:
+    #- ping
+    #- revoked
+    #- generateVault
+    #- insereScript
